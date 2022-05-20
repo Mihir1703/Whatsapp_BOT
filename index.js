@@ -4,7 +4,7 @@ const { Boom } = require('@hapi/boom')
 const fs = require('fs')
 const handleCommands = require('./utils/commands');
 
-async function connectToWhatsApp () {
+async function connectToWhatsApp() {
     const { state, saveState } = useSingleFileAuthState('./auth_info_multi.json')
     const sock = makeWASocket({
         auth: state,
@@ -13,16 +13,16 @@ async function connectToWhatsApp () {
     sock.ev.on('creds.update', saveState)
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update
-        if(connection === 'close') {
+        if (connection === 'close') {
             const shouldReconnect = lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
             console.log('connection closed due to ' + lastDisconnect.error + ', reconnecting ' + shouldReconnect)
             // reconnect if not logged out
-            if(shouldReconnect) {
+            if (shouldReconnect) {
                 connectToWhatsApp()
             }
-        } else if(connection === 'open') {
+        } else if (connection === 'open') {
             console.log('opened connection')
-        } 
+        }
     })
     sock.ev.on('messages.upsert', async (chat) => {
         try {
@@ -52,6 +52,7 @@ async function connectToWhatsApp () {
         } catch (error) {
             console.log(error)
         }
-    })}
+    })
+}
 // run in main file
 connectToWhatsApp()

@@ -36,7 +36,14 @@ module.exports = async function (client, controller, chat) {
                     "scale=2000:2000:flags=lanczos:force_original_aspect_ratio=decrease,format=rgba,pad=2000:2000:(ow-iw)/2:(oh-ih)/2:color=#00000000,setsar=1"
                 ).size('200x200')
                 .save(sticker_path).on('end', async () => {
-                    await controller.sendMessage(client, { sticker: { url: sticker_path } });
+                    const final_message = await controller.sendMessage(client, { sticker: { url: sticker_path } });
+                    const reactionMessage = {
+                        react: {
+                            text: "😉",
+                            key: final_message.key
+                        }
+                    }
+                    await controller.sendMessage(client, reactionMessage)
                     try {
                         fs.unlinkSync(file);
                         fs.unlinkSync(sticker_path);

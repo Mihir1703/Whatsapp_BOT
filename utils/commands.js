@@ -33,7 +33,7 @@ module.exports = async (client, message, controller, chat) => {
         }
         else if (commands(message, '.alive').status) {
             await controller.sendPresenceUpdate('composing', client)
-            await alive(client, controller);
+            await alive(client, controller,chat);
             await controller.sendPresenceUpdate('available', client)
         }
         else if (commands(message, '.help').status) {

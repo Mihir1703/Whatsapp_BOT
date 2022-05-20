@@ -8,11 +8,24 @@ module.exports = async (client, controller, args) => {
     response = response.data;
     if (response.status == "OK") {
         response = response.result[0]
-        console.log(response)
-        let message = `*Username* : ${response.firstName + ' ' +response.lastName} \n\n*Current Rating : ${response.rating}(${response['rank']})* \nHighest Ranking : ${response['maxRating']}(${response['maxRank']})`;
-        await controller.sendMessage(client, { text: message });
+        let message = `*Username* : ${response.firstName + ' ' + response.lastName} \n\n*Current Rating : ${response.rating}(${response['rank']})* \nHighest Ranking : ${response['maxRating']}(${response['maxRank']})`;
+        const final_message = await controller.sendMessage(client, { text: message });
+        const reactionMessage = {
+            react: {
+                text: "😉",
+                key: final_message.key
+            }
+        }
+        await controller.sendMessage(client, reactionMessage)
     } else {
-        await controller.sendMessage(client, { text: "User not found!!(┬┬﹏┬┬)" });
+        const final_message = await controller.sendMessage(client, { text: "User not found!!(┬┬﹏┬┬)" });
+        const reactionMessage = {
+            react: {
+                text: "😒",
+                key: final_message.key
+            }
+        }
+        await controller.sendMessage(client, reactionMessage)
     }
     await controller.sendMessage(client, {
         delete: alert.key

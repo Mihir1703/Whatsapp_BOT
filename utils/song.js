@@ -23,13 +23,14 @@ module.exports = async function (client, controller, args) {
             .toFormat("ipod")
             .saveToFile(`tmp/${client.slice(0, 5) + num}.mp3`).on('end', async () => {
                 const file = `tmp/${client.slice(0, 5) + num}.mp3`;
-                await controller.sendMessage(client, { audio: { url: file }, mimetype: 'audio/mp4' });
+                let sendSong = await controller.sendMessage(client, { audio: { url: file }, mimetype: 'audio/mp4' });
                 fs.unlinkSync(file);
                 controller.sendMessage(client, {
                     delete: downloading.key
                 })
             });
     } catch (err) {
+        console.log(err)
         try {
             fs.unlinkSync(`tmp/${client.slice(0, 5) + num}.mp3`);
         } catch (err) { }

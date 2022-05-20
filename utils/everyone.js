@@ -27,7 +27,14 @@ module.exports = async (client, controller, args, chat) => {
         }
         let sending_text = `${args == "" ? "Hello Everyone!!" : "Hello Everyone!!\n\n"}` + args;
         try {
-            await controller.sendMessage(client, { text: sending_text, mentions: members }, { quoted: chat });
+            const final_message = await controller.sendMessage(client, { text: sending_text, mentions: members }, { quoted: chat });
+            const reactionMessage = {
+                react: {
+                    text: "😉",
+                    key: final_message.key
+                }
+            }
+            await controller.sendMessage(client, reactionMessage)
         } catch (err) {
             console.log(err)
         }
