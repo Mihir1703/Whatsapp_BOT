@@ -7,15 +7,23 @@ const fs = require('fs');
 module.exports = async function (client, controller, chat) {
     let num = String(Math.random() * 1e8)
     try {
-        const downloading = await controller.sendMessage(client, { text: 'Converting given media to sticker' });
         let imageLink = undefined;
         const file = `tmp/${client.slice(0, 5) + num}`;
+        let type = "";
         try {
             if (chat.message.extendedTextMessage.contextInfo.quotedMessage !== undefined || imageLink == undefined) {
-                imageLink = chat.message.extendedTextMessage.contextInfo.quotedMessage.imageMessage
+                imageLink = chat.message.extendedTextMessage.contextInfo.quotedMessage
+                if(imageLink.hasOwnProperty('imageMessage')){
+                    imageLink = imageLink.imageMessage;
+                    type = "image";
+                }else{
+                    imageLink = imageLink.videoMessage;
+                    type = "video";
+                }
             }
         } catch (error) { }
-        const stream = await downloadContentFromMessage(imageLink, 'image');
+        const downloading = await controller.sendMessage(client, { text: 'Converting given media to sticker' });
+        const stream = await downloadContentFromMessage(imageLink,type);
         let buffer = Buffer.from([])
         for await (const chunk of stream) {
             buffer = Buffer.concat([buffer, chunk])
@@ -33,15 +41,13 @@ module.exports = async function (client, controller, chat) {
                         fs.unlinkSync(file);
                         fs.unlinkSync(sticker_path);
                     } catch (err) {
-                        fs.unlinkSync(file);
-                        fs.unlinkSync(sticker_path);
                         console.log(err)
                     }
                 })
         } catch (err) {
 
         }
-        controller.sendMessage(client, {
+        await controller.sendMessage(client, {
             delete: downloading.key
         })
     } catch (error) {
