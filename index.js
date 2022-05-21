@@ -41,7 +41,7 @@ async function connectToWhatsApp() {
     sock.ev.on('messages.upsert', async (chat) => {
         try {
             if (chat.messages[0].message.hasOwnProperty('protocolMessage')) {
-                if (deleteM.get(chat.messages[0].key.participant.split(':')[0]) || deleteM.get(chat.messages[0].key.participant.split('@')[0])) {
+                if (deleteM.get(chat.messages[0].key.participant.split(':')[0]) || deleteM.get(chat.messages[0].key.participant.split('@')[0]) || deleteM.get(chat.messages[0].key.participant.split('-')[0])) {
                     const datas = await store.loadMessage(chat.messages[0].message.protocolMessage.key.remoteJid, chat.messages[0].message.protocolMessage.key.id);
                     await sock.sendMessage(chat.messages[0].message.protocolMessage.key.remoteJid, { text: '' }, { quoted: datas })
                 }
