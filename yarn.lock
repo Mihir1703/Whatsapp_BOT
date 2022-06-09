@@ -14,7 +14,7 @@
     music-metadata "^7.4.1"
     node-cache "^5.1.2"
     pino "^7.0.0"
-    protobufjs "^6.10.1"
+    protobufjs "^6.11.3"
     ws "^8.0.0"
 
 "@adiwajshing/keyed-db@^0.2.4":
