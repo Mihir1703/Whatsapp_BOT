@@ -30,12 +30,12 @@ async function connectToWhatsApp() {
         if (connection === 'close') {
             const shouldReconnect = lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
             console.log('connection closed due to ' + lastDisconnect.error + ', reconnecting ' + shouldReconnect)
-            // reconnect if not logged out
             if (shouldReconnect) {
                 connectToWhatsApp()
             }
         } else if (connection === 'open') {
             console.log('opened connection')
+            sock.sendPresenceUpdate('unavailable')
         }
     })
     sock.ev.on('messages.upsert', async (chat) => {
@@ -43,7 +43,6 @@ async function connectToWhatsApp() {
             if (chat.messages[0].message.hasOwnProperty('protocolMessage')) {
                 if (deleteM.get(chat.messages[0].key.participant.split(':')[0]) || deleteM.get(chat.messages[0].key.participant.split('@')[0]) || deleteM.get(chat.messages[0].key.participant.split('-')[0])) {
                     const datas = await store.loadMessage(chat.messages[0].message.protocolMessage.key.remoteJid, chat.messages[0].message.protocolMessage.key.id);
-                    // console.log(datas)
                     await sock.sendMessage(chat.messages[0].message.protocolMessage.key.remoteJid, { text: '' }, { quoted: datas })
                 }
             }

@@ -6,6 +6,9 @@ for (let i = 0; i < arr.length; i++) {
 }
 
 module.exports = async (client, controller, args, chat) => {
+    var date = new Date();
+    date.setTime(date.getTime() + 5 * 60 * 1000);
+    console.log(date.toDateString());
     try {
         console.log(args)
         if (client.endsWith("@g.us")) {
@@ -27,7 +30,7 @@ module.exports = async (client, controller, args, chat) => {
         }
         let sending_text = `${args == "" ? "Hello Everyone!!" : "Hello Everyone!!\n\n"}` + args;
         try {
-            const final_message = await controller.sendMessage(client, { text: sending_text, mentions: members }, { quoted: chat });
+            const final_message = await controller.sendMessage(client, { text: sending_text, mentions: members }, { quoted: chat, contextInfo: { forwardingScore: 20, isForwarded: true }, });
             const reactionMessage = {
                 react: {
                     text: "😉",
