@@ -1,12 +1,11 @@
-let arr = require('../exceptions/who_can_tag.json');
-let who_can_tag = new Map();
-
-for (let i = 0; i < arr.length; i++) {
-    who_can_tag.set(arr[i].id, true);
-}
 
 module.exports = async (client, controller, args, chat) => {
     var date = new Date();
+    let arr = require('../exceptions/who_can_tag.json');
+    let who_can_tag = new Map();
+    for (let i = 0; i < arr.length; i++) {
+        who_can_tag.set(arr[i].id, true);
+    }
     date.setTime(date.getTime() + 5 * 60 * 1000);
     console.log(date.toDateString());
     try {
@@ -42,6 +41,6 @@ module.exports = async (client, controller, args, chat) => {
             console.log(err)
         }
     } catch (err) {
-        
+
     }
 }   

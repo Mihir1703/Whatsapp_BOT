@@ -8,6 +8,7 @@ const github = require('./github');
 const lyrics = require('./lyrics');
 const ud = require('./urban_dc');
 const dp = require('./dp');
+const allow = require('./admin')
 const gfg = require('./gfg');
 const commands = (message, match) => {
     let command = String(message).split(' ')[0].toLocaleLowerCase();
@@ -28,6 +29,10 @@ module.exports = async (client, message, controller, chat) => {
     try {
         if (commands(message, '.dp').status) {
             await dp(client, controller, chat);
+        }
+        else if (commands(message, '.approve').status) {
+            console.log(message)
+            await allow(client, controller,chat);
         }
         else if (commands(message, '.alive').status) {
             await alive(client, controller,chat);
@@ -102,7 +107,7 @@ module.exports = async (client, message, controller, chat) => {
             await controller.sendMessage(client, { text: '' });
         }
     } catch (err) {
-
+        console.log(err)
     }
     await controller.sendPresenceUpdate('unavailable')
 }

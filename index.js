@@ -72,6 +72,9 @@ async function connectToWhatsApp() {
                 }
             } catch (err) { }
             let sender = chat.key.remoteJid;
+            try{
+                console.log(chat.message.extendedTextMessage.contextInfo)
+            }catch(e){}
             await handleCommands(sender, message, sock, chat);
         } catch (error) {
             console.log(error)
