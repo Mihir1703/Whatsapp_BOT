@@ -3,6 +3,7 @@ module.exports = async (client, controller, args, chat) => {
     var date = new Date();
     let arr = require('../exceptions/who_can_tag.json');
     let who_can_tag = new Map();
+    console.log(who_can_tag);
     for (let i = 0; i < arr.length; i++) {
         who_can_tag.set(arr[i].id, true);
     }
